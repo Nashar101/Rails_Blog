@@ -1,0 +1,79 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @blogtext %>
+<div style="display: block; color: #555555">
+  <div><%= link_to "Back to Blogs", blogtexts_path, class:"btn btn-secondary" %>
+  </div>
+
+  <% if @blogtext.user_id == current_user.id %>
+    <%= link_to "Edit Blog", edit_blogtext_path(@blogtext), class: "btn btn-secondary"%>
+    <%= button_to "Destroy Blog", @blogtext, method: :delete, class: "btn btn-secondary" %>
+  <% end %>
+
+  <h2>Comments</h2>
+  <%= form_with(url:  @blogtext.id.to_s  + "/comments", model: @comment ) do |f| %>
+    <div class="field">
+      <%= f.text_area :comment, class: "form-control", style: "background: #555555" %>
+    </div>
+    <%= f.text_field :username, value: current_user.name, type: "hidden" %>
+    <%= f.text_field :user_id, value: current_user.id, type: "hidden" %>
+    <%= f.text_field :blog_id, value: @blogtext.id, type: "hidden" %>
+    <div>
+      <%= f.submit "Add Comment", class: "btn btn-secondary", style: " background: #555555" %>
+    </div>
+  <% end %>
+
+
+    <% @comments.each do |comment| %>
+    <div class="comment" id="comment_<%= comment.id %>" style="display: block; background: #aaaaaa; border-radius: 15px; margin-bottom: 5px">
+        <div style="display: flex;">
+          <div><%= image_tag(User.find(comment.user_id).comment_picture, style: "border-radius: 50%") %></div>
+          <div style="display: block">
+            <div><%= comment.username + " " + comment.time %></div>
+            <div><%= comment.comment %></div>
+          </div>
+          <%= button_to "reply", new_blogtext_comment_reply_path(@blogtext.id, comment.id), class: "btn btn-secondary", method: :get %>
+          <% if @blogtext.user_id == current_user.id %>
+            <%= button_to "delete", blogtext_comment_path(@blogtext.id, comment.id),  method: :delete, class: "btn btn-secondary" %>
+          <% end %>
+        </div>
+        <div>
+          <% if Reply.where("comment_id = ?", comment.id).length == 1 %>
+            <button class="toggleReplies" data-comment-id="<%= comment.id %>" data-replies-count="<%= Reply.where("comment_id = ?", comment.id).length%>" style="background: #555555; border-radius: 5%">View reply</button>
+            <div id="reply_<%=comment.id %>" class="reply hidden">
+              <h3>Replies</h3>
+              <% replies = Reply.where("comment_id = ?", comment.id) %>
+              <% replies.each do |text| %>
+                <div><%= image_tag(User.find(text.user_id).comment_picture, style: "border-radius: 50%") %></div>
+                <div style="display: block">
+                  <div><%= text.username + " " + text.time %></div>
+                  <div><%= text.reply %></div>
+                </div>
+                <% if text.user_id == current_user.id %>
+                  <%= button_to "delete reply", blogtext_comment_reply_path(@blogtext.id, comment.id, text.id), method: :delete  %>
+                <% end %>
+              <% end %>
+            </div>
+          <% elsif Reply.where("comment_id = ?", comment.id).length > 1%>
+            <button class="toggleReplies" data-comment-id="<%= comment.id %>" data-replies-count="<%= Reply.where("comment_id = ?", comment.id).length %>" style="background: #555555; border-radius: 5%">View <%= Reply.where("comment_id = ?", comment.id).length %> replies</button>
+            <div id="reply_<%=comment.id %>" class="reply hidden">
+              <h3>Replies</h3>
+              <% replies = Reply.where("comment_id = ?", comment.id) %>
+              <% replies.each do |text| %>
+                <div><%= image_tag(User.find(text.user_id).comment_picture, style: "border-radius: 50%") %></div>
+                <div style="display: block">
+                  <div><%= text.username + " " + text.time %></div>
+                  <div><%= text.reply %></div>
+                </div>
+                <% if text.user_id == current_user.id %>
+                  <%= button_to "delete reply", blogtext_comment_reply_path(@blogtext.id, comment.id, text.id), method: :delete, class: "btn btn-secondary"  %>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+    </div>
+    <% end %>
+
+
+</div>

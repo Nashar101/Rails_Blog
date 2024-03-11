@@ -1,0 +1,9 @@
+<h1>Add a reply to <%= Comment.find(@comment_id).username %>'s Comment </h1>
+
+<%= render "form", blogtext: @reply %>
+
+<br>
+
+<div>
+  <%= link_to "Back to blogtexts", blogtext_path(Comment.find(@comment_id).blog_id) %>
+</div>

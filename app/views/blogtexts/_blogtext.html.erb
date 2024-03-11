@@ -1,0 +1,13 @@
+<div id="<%= dom_id blogtext %>">
+  <p>
+
+
+    <h2><%= blogtext.title %> By <%= link_to blogtext.owner, blog_path(id: blogtext.user_id), style: "color:#c0c0c0" %></h2>
+
+    <div style="border-radius: 15px; border-style: solid; border-color: #2E2F30; background: #aaaaaa; color: #555555">
+      <%= blogtext.blogpost %>
+
+    </div>
+  </p>
+
+</div>

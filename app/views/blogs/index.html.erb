@@ -1,0 +1,16 @@
+<h1>About You</h1>
+<div style="background: #555555; border-radius: 15px; min-height: 300px">
+<%= current_user.bio %>
+</div>
+<h2>Your Blogs</h2>
+<div id="my_blogs" style="display: flex; flex-wrap: wrap; background: #555555; border-radius: 15px; min-height: 300px">
+  <% @my_blogs.each do |blog| %>
+    <div style="display: flex; margin-bottom: 15px">
+      <%= image_tag(User.find(blog.user_id).header_picture, style: "border-radius: 50%") %>
+      <div style="width: 250px; height: 110px">
+        <div><%= blog.owner %></div>
+        <%= link_to blog.title, blog, class: "btn btn-secondary" %>
+      </div>
+    </div>
+  <% end %>
+</div>

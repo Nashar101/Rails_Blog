@@ -1,0 +1,35 @@
+<%= form_with(model: @blogtext) do |form| %>
+  <% if @blogtext.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@blogtext.errors.count, "error") %> prohibited this blogtext from being saved:</h2>
+
+      <ul>
+        <% @blogtext.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.hidden_field :owner, value: current_user.name %>
+  </div>
+
+  <div>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+  </div>
+
+  <div>
+    <%= form.label "blogs Title" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label "New blogs" %>
+    <%= form.rich_text_area :blogpost %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

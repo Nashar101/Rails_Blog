@@ -1,0 +1,19 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Blogs</h1>
+
+<%= link_to "My Blogs", blogs_path, class: "btn btn-secondary" %>
+<%= link_to "Create new Blog", new_blogtext_path, class: "btn btn-secondary" %>
+<div id="blogtexts" style="display: flex; flex-wrap: wrap">
+  <% @blogtexts.each do |blogtext| %>
+    <div style="display: flex; margin-bottom: 15px; background: #555555; border-radius: 15px; margin-right: 15px">
+      <%= image_tag(User.find(blogtext.user_id).header_picture, style: "border-radius: 50%") %>
+      <div style="width: 250px; height: 110px">
+        <div><%= blogtext.owner %></div>
+        <%= link_to blogtext.title, blogtext, class: "btn btn-secondary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
